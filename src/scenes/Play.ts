@@ -63,7 +63,7 @@ export default class Play extends Phaser.Scene {
     }
   
     spawnEnemy() {
-      this.enemies.push(this.add.rectangle(900, Math.random() * 400, 50, 50, 0xFF0000));
+      this.enemies.push(this.add.rectangle(900, Math.random() * 400, 50, 50, 0xFF0000).setOrigin(0.5,0.5));
       setTimeout(()=>{this.spawnEnemy()}, Math.random()* 2000 + 500)
     this.spinner = this.add.rectangle(100, 100, 50, 50, 0x53faa2);
   }
@@ -102,8 +102,8 @@ export default class Play extends Phaser.Scene {
     this.enemies.forEach((enemy) => {
       enemy.x -= delta * this.enemyVelocity;
       if (
-        Math.abs(enemy.x - this.spinner!.x) < 40 &&
-        Math.abs(enemy.y - this.spinner!.y) < 40
+        Math.abs(enemy.x - this.spinner!.x) < enemy.width/2 + this.spinner!.width/2 &&
+        Math.abs(enemy.y - this.spinner!.y) < enemy.width/2 + this.spinner!.width/2
       ) {
         this.enemies.splice(this.enemies.indexOf(enemy), 1);
         enemy.destroy();
