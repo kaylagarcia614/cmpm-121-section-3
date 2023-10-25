@@ -73,11 +73,15 @@ export default class Play extends Phaser.Scene {
 
     if (this.left!.isDown) {
       this.spinner!.rotation -= delta * this.rotationSpeed;
-      this.spinner!.x -= delta * this.leftRightVelocity;
+      if (!this.fired) {
+        this.spinner!.x -= delta * this.leftRightVelocity;
+      }
     }
     if (this.right!.isDown) {
       this.spinner!.rotation += delta * this.rotationSpeed;
-      this.spinner!.x += delta * this.leftRightVelocity;
+      if (!this.fired) {
+        this.spinner!.x += delta * this.leftRightVelocity;
+      }
     }
 
     if (this.fire!.isDown) {
@@ -97,6 +101,13 @@ export default class Play extends Phaser.Scene {
     }
     this.enemies.forEach((enemy) => {
       enemy.x -= delta * this.enemyVelocity;
-    })
+      if (
+        Math.abs(enemy.x - this.spinner!.x) < 40 &&
+        Math.abs(enemy.y - this.spinner!.y) < 40
+      ) {
+        this.enemies.splice(this.enemies.indexOf(enemy), 1);
+        enemy.destroy();
+      }
+    });
   }
 }
